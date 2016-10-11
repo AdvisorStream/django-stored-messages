@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 
@@ -26,9 +26,9 @@ class InboxViewSet(viewsets.ViewSet):
 
         try:
             msg = backend.inbox_get(request.user, pk)
-        except MessageDoesNotExist as e:
-            return Response(e.message, status='404')
-
+        except MessageDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
         serializer = InboxSerializer(msg, many=False)
         return Response(serializer.data)
 
@@ -42,9 +42,9 @@ class InboxViewSet(viewsets.ViewSet):
 
         try:
             backend.inbox_delete(request.user, pk)
-        except MessageDoesNotExist as e:
-            return Response(e.message, status='404')
-
+        except MessageDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
         return Response({'status': 'message marked as read'})
 
 
