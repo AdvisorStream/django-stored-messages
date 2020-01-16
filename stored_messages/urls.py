@@ -9,8 +9,9 @@ if 'rest_framework' in settings.INSTALLED_APPS:
     from . import views
 
     router = DefaultRouter()
-    router.register(r'inbox', views.InboxViewSet, base_name='inbox')
+    router.register(r'inbox', views.InboxViewSet, basename='inbox')
 
+    app_name = 'stored_messages'
     urlpatterns = [
         url(r'^', include(router.urls)),
         url(r'^mark_all_read/$', views.mark_all_read, name='mark_all_read'),
